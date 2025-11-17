@@ -1,0 +1,32 @@
+RewriteEngine On
+
+DirectoryIndex index.php
+
+php_flag display_errors On
+php_value error_reporting E_ALL
+
+php_value upload_max_filesize 50M
+php_value post_max_size 50M
+php_value max_execution_time 300
+php_value memory_limit 256M
+
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+
+<Files "*.sql">
+    Deny from all
+</Files>
+
+<Files ".env">
+    Deny from all
+</Files>
+
+<FilesMatch "\.(mp3|wav|ogg|m4a)$">
+    Header set Cache-Control "public, max-age=31536000"
+</FilesMatch>
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^admin/?$ admin.php [L]
+RewriteRule ^albums/?$ albums.php [L]
